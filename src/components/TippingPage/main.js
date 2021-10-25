@@ -1,0 +1,113 @@
+import React, {useState} from 'react';
+import { useParams } from 'react-router';
+import { FiCopy } from 'react-icons/fi';
+import { io } from 'socket.io-client';
+import Web3 from 'web3';
+import Gradient from 'rgt';
+import { ethers } from "ethers";
+
+const socket = io("http://localhost:5050");
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function putDotsAfterLongString(string) {
+    return string.replace(string.substring(6, 39), '...');
+}
+
+const verifyMessage = async ({ message, address, signature }) => {
+    try {
+      const signerAddr = await ethers.utils.verifyMessage(message, signature);
+      if (signerAddr !== address) {
+        return false;
+      }
+  
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+const MainTippingPage = () => {
+    const streamer = useParams();
+    const { ethereum } = window;
+    const [amountToTip, setAmountToTip] = useState('');
+    const [tipperName, setTipperName] = useState('');
+    const [description, setDescription] = useState('');
+    const { streamerKey } = useParams();
+    const web3 = new Web3(ethereum);
+    verifyMessage({message:streamer.streamerName,address:streamer.streamerKey,signature:streamer.streamerSig}).then((res) => {
+        console.log(res)
+        if(res == false) {
+            window.location.href = "/404";
+        }
+    });
+    // console.log(ethereum.networkVersion);
+    if(typeof window.ethereum !== 'undefined') {
+        // if(ethereum.networkVersion != '1') {
+        //     alert('Invalid Network.');
+        // }
+    }
+
+    const tipStreamer = async () => {
+        const tipperAddress = (await ethereum.request({ method: 'eth_requestAccounts' }))[0];
+        if(amountToTip === '') {
+            alert("You need to type amount of ethers to tip.");
+        } else {
+            const transactionParameters = {
+                nonce: '0x00', // ignored by MetaMask
+                gasPrice: ethers.utils.parseUnits('0.001', 'ether').toHexString(), // customizable by user during MetaMask confirmation.
+                gas: '0x2710', // customizable by user during MetaMask confirmation.
+                to: streamerKey, // Required except during contract publications.
+                from: ethereum.selectedAddress, // must match user's active address.
+                value: ethers.utils.parseUnits(amountToTip, 'ether').toHexString(), // Only required to send ether to the recipient from the initiating external account.
+                chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+            };
+            // txHash is a hex string
+            // As with any RPC call, it may throw an error
+            const txHash = await ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParameters],
+            });
+            if(tipperName === '') {
+                socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: null, address: tipperAddress, description });
+            } else {
+                socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: tipperName, address: tipperAddress, description, date: new Date() });
+            }
+            alert("Donation Accepted! Thanks for supporting", streamer.streamerName)
+        }
+    }
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    
+
+    // console.log(streamer.streamerKey);
+    return (
+        <div>
+            <div className="p-60">
+                <h1 className="text-6xl" style={{fontFamily: 'Poppins', fontWeight: '600'}}><Gradient dir="left-to-right" from="#9C4EFF" to="#FF006B">{capitalizeFirstLetter(useParams().streamerName)}</Gradient></h1>
+                <button onClick={() => {navigator.clipboard.writeText(streamerKey)}} className="bg-white hover:bg-green-400 hover:text-white text-green-600 font-bold py-3 px-6 rounded transition-all duration-200 mt-3 w-44" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>{ putDotsAfterLongString(useParams().streamerKey) } <FiCopy className="ml-32" style={{marginTop:'-20px'}} /></button>
+                <br />
+                <br />
+                <div class="mb-4">
+                    <input class="mt-5 rounded w-72 py-2 px-3 text-white bg-gray-800" id="signature" required onChange={(event) => setTipperName(event.target.value)} placeholder="Name" />
+                    <br />
+                    <input class="mt-5 rounded w-72 py-2 px-3 text-white bg-gray-700" id="public_key" required onChange={(event) => setAmountToTip(event.target.value)} placeholder="Amount To Tip (In ETH)*" />
+                    <br />
+                    <input class="mt-5 rounded w-72 h-20 py-2 px-3 text-white bg-gray-600" id="public_key" required onChange={(event) => setDescription(event.target.value)} placeholder="Description" />
+                </div>
+                <button onClick={tipStreamer} className="bg-green-400 hover:bg-white hover:text-green-400 text-gray-900 font-bold py-3 px-6 rounded transition-all duration-200 mt-5" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>Tip</button>
+
+            </div>
+            <div id="howtouse" style={{marginTop:'-42.5rem',marginLeft:'90rem'}}>
+                <h1 className="text-5xl text-white" style={{fontFamily:'Poppins',fontWeight:'bold'}}>How to Tip</h1>
+                <p className="text-white pt-10" style={{fontFamily:'Poppins',fontWeight:'400'}}>To tip, you need to install MetaMask Wallet.<br />then, when tipping you'll need to accept payment in MetaMask</p>
+            </div>
+        </div>
+    )
+}
+
+export default MainTippingPage;
