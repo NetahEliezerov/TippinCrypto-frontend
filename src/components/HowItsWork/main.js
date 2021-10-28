@@ -3,7 +3,7 @@ import React from 'react'
 const MainHIWPage = () => {
     return (
         <div>
-            <h1 className="text-center text-5xl pt-36 text-white" style={{fontFamily:'Poppins',fontWeight:'bold'}}>Sign Up</h1>
+            {/* <h1 className="text-center text-5xl pt-36 text-white" style={{fontFamily:'Poppins',fontWeight:'bold'}}>Sign Up</h1>
             <div className="bg-gray-800 rounded-lg" style={{width: '50%', marginLeft: 'auto', marginRight: 'auto', marginTop: '1%'}}>
                 <p className="text-center text-1xl text-white pt-5"  style={{fontFamily:'Poppins',fontWeight:'400'}}>
                 First, Go to "Sign Up" Page. Now you need to choose the way you prefer to sign up to the account.<br/>Currently we support two different ways to sign up, "MetaMask", and TippinCrypto.<br />For this explane we'll use MetaMask.
@@ -29,7 +29,7 @@ const MainHIWPage = () => {
                 </p>
                 <img src="/4thStep.png" className="mt-5"/><br /><br />
                 
-            </div>
+            </div> */}
         </div>
     )
 }

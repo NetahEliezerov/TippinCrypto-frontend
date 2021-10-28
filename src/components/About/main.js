@@ -8,7 +8,7 @@ const MainAboutPage = () => {
         <div>
             <AboutUs />
             <MainFeaturesPage />
-            <Team />
+            {/* <Team /> */}
         </div>
     )
 }

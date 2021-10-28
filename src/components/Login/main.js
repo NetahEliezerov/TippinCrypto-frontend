@@ -62,6 +62,7 @@ const MainLoginPage = () => {
             window.location.href = "/";
         } else {
             alert('MetaMask Not Installed!');
+            window.location.href = "/";
         }
       
     }

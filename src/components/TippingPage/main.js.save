@@ -2,12 +2,11 @@ import React, {useState} from 'react';
 import { useParams } from 'react-router';
 import { FiCopy } from 'react-icons/fi';
 import { io } from 'socket.io-client';
-import axios from 'axios';
 import Web3 from 'web3';
 import Gradient from 'rgt';
 import { ethers } from "ethers";
 
-const socket = io("https://153.92.222.12:443");
+const socket = io("http://http://153.92.222.12:5050");
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -47,11 +46,9 @@ const MainTippingPage = () => {
     });
     // console.log(ethereum.networkVersion);
     if(typeof window.ethereum !== 'undefined') {
-        if(ethereum.networkVersion != '1') {
-            alert('Invalid Network.');
-            window.open("about:blank", "_self");
-            window.close();
-        }
+        // if(ethereum.networkVersion != '1') {
+        //     alert('Invalid Network.');
+        // }
     }
 
     const tipStreamer = async () => {
@@ -59,36 +56,27 @@ const MainTippingPage = () => {
         if(amountToTip === '') {
             alert("You need to type amount of ethers to tip.");
         } else {
-            const ethereumPrice = (await axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,ILS')).data;
-            console.log(ethereumPrice.USD, parseFloat(amountToTip))
-            console.log(ethereumPrice.USD * parseFloat(amountToTip));
-            const amountthathewantstotip = ethereumPrice.USD * parseFloat(amountToTip);
-            console.log(parseFloat(amountToTip) < amountthathewantstotip);
-            if(3 > amountthathewantstotip) {
-                alert("You can't tip an amount that below 3 dollars.")
+            const transactionParameters = {
+                nonce: '0x00', // ignored by MetaMask
+                gasPrice: ethers.utils.parseUnits('0.001', 'ether').toHexString(), // customizable by user during MetaMask confirmation.
+                gas: '0x2710', // customizable by user during MetaMask confirmation.
+                to: streamerKey, // Required except during contract publications.
+                from: ethereum.selectedAddress, // must match user's active address.
+                value: ethers.utils.parseUnits(amountToTip, 'ether').toHexString(), // Only required to send ether to the recipient from the initiating external account.
+                chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+            };
+            // txHash is a hex string
+            // As with any RPC call, it may throw an error
+            const txHash = await ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [transactionParameters],
+            });
+            if(tipperName === '') {
+                socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: null, address: tipperAddress, description });
             } else {
-                const transactionParameters = {
-                    nonce: '0x00', // ignored by MetaMask
-                    gasPrice: ethers.utils.parseUnits('0.001', 'ether').toHexString(), // customizable by user during MetaMask confirmation.
-                    gas: '0x2710', // customizable by user during MetaMask confirmation.
-                    to: streamerKey, // Required except during contract publications.
-                    from: ethereum.selectedAddress, // must match user's active address.
-                    value: ethers.utils.parseUnits(amountToTip, 'ether').toHexString(), // Only required to send ether to the recipient from the initiating external account.
-                    chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-                };
-                // txHash is a hex string
-                // As with any RPC call, it may throw an error
-                const txHash = await ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [transactionParameters],
-                });
-                if(tipperName === '') {
-                    socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: null, address: tipperAddress, description });
-                } else {
-                    socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: tipperName, address: tipperAddress, description, date: new Date() });
-                }
-                alert("Donation Accepted! Thanks for supporting", streamer.streamerName);
+                socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: tipperName, address: tipperAddress, description, date: new Date() });
             }
+            alert("Donation Accepted! Thanks for supporting", streamer.streamerName)
         }
     }
 
@@ -100,9 +88,8 @@ const MainTippingPage = () => {
     return (
         <div>
             <div className="p-60">
-                {/* <img src={`https://avatars.dicebear.com/api/initials/${useParams().streamerName}.svg`} className="w-20 rounded-full" /> */}
-                <h1 className="text-6xl pt-3" style={{fontFamily: 'Poppins', fontWeight: '600'}}><Gradient dir="left-to-right" from="#9C4EFF" to="#FF006B">{capitalizeFirstLetter(useParams().streamerName)}</Gradient></h1>
-                <button onClick={() => {navigator.clipboard.writeText(streamerKey)}} className="bg-white hover:bg-green-400 hover:text-white text-green-600 font-bold py-3 px-6 rounded transition-all duration-200 mt-5 w-44" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>{ putDotsAfterLongString(useParams().streamerKey) } <FiCopy className="ml-32" style={{marginTop:'-20px'}} /></button>
+                <h1 className="text-6xl" style={{fontFamily: 'Poppins', fontWeight: '600'}}><Gradient dir="left-to-right" from="#9C4EFF" to="#FF006B">{capitalizeFirstLetter(useParams().streamerName)}</Gradient></h1>
+                <button onClick={() => {navigator.clipboard.writeText(streamerKey)}} className="bg-white hover:bg-green-400 hover:text-white text-green-600 font-bold py-3 px-6 rounded transition-all duration-200 mt-3 w-44" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>{ putDotsAfterLongString(useParams().streamerKey) } <FiCopy className="ml-32" style={{marginTop:'-20px'}} /></button>
                 <br />
                 <br />
                 <div class="mb-4">

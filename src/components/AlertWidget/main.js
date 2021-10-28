@@ -4,7 +4,7 @@ import Gradient from 'rgt';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 
-const socket = io("http://localhost:5050");
+const socket = io("https://153.92.222.12:443");
 
 const MainAlertWidget = () => {
     const [ethPrice, setEthPrice] = useState(0);
