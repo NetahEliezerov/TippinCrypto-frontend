@@ -5,6 +5,6 @@ export const apiConfig = {
         "domain": "localhost:3000"
     },
     "modes": {
-        "testMode": true
+        "testMode": false
     }
 }
