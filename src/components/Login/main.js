@@ -54,7 +54,7 @@ const MainLoginPage = () => {
     }
 
     const loginWithMetamask = async () => {
-        if(typeof ethereum !== 'undefined'){
+        if(typeof ethereum !== 'undefined' && ethereum.send("eth_requestAccounts") == null){
             await ethereum.send("eth_requestAccounts");
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
@@ -65,7 +65,6 @@ const MainLoginPage = () => {
             alert('MetaMask Not Installed!');
             window.location.href = "/";
         }
-      
     }
 
     if(cookies.get('pub_address') != undefined || cookies.get('prvt_add') != undefined) {

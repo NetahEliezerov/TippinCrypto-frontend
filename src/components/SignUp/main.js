@@ -74,7 +74,7 @@ const MainSignUpPage = () => {
     const signUpWithMetamaskBtn = async () => {
         setShowLoginSelections(false);
         let metamaskInstalled;
-        if(typeof ethereum !== undefined) {
+        if(typeof ethereum !== 'undefined' && ethereum.send("eth_requestAccounts") == null) {
             metamaskInstalled = true;
         } else {
             metamaskInstalled = false;
