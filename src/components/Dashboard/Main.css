@@ -1,0 +1,55 @@
+.sidenav {
+    height: 100%;
+    width: 18rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: #0d0d11;
+    padding-top: 5rem;
+    font-family: 'Poppins';
+  }
+  
+  .firstNavbarBtn {
+      margin-top: 10rem;
+  }
+
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 25px;
+    color: white;
+    background: linear-gradient(90deg, rgba(223,92,155,1) 0%, rgba(248,126,92,1) 50%, rgba(255,190,149,1) 100%);
+    width: 12rem;
+    display: block;
+    border-radius: 8px;
+    transition-duration: 350ms;
+  }
+  
+  .sidenav a:hover {
+      color: #0d0d11;
+  }
+  
+  .main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.balanceDiv {
+    margin-left: 17.5%;
+    margin-top: 5%;
+}
+
+.recentTips {
+    margin-left: 17.5%;
+    margin-top: 1.5%;
+}

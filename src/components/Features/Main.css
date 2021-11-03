@@ -1,0 +1,15 @@
+.feature {
+    transition-duration: 300ms;
+    animation-name: fadeIn;
+    animation-duration: 800ms;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

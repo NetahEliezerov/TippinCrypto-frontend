@@ -27,7 +27,8 @@ const verifyMessage = async ({ message, address, signature }) => {
 
 const MainLoginPage = () => {
     const query = useQuery();
-    const clientType = query.get('as');
+    // const clientType = query.get('as');
+    const { ethereum } = window;
     const [showForm, setShowForm] = useState(false);
     const [privateKey, setPrivateKey] = useState('');
     const [signature, setSignature] = useState('');
@@ -53,8 +54,8 @@ const MainLoginPage = () => {
     }
 
     const loginWithMetamask = async () => {
-        if(typeof window.ethereum !== 'undefined'){
-            await window.ethereum.send("eth_requestAccounts");
+        if(typeof ethereum !== 'undefined'){
+            await ethereum.send("eth_requestAccounts");
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
             cookies.set('userProvider', 'MetaMask');
@@ -90,8 +91,8 @@ const MainLoginPage = () => {
     return (
         <center>
             { showLoginSelections ? <div id="loginSelection">
-                <button onClick={() => { setShowForm(true); setShowLoginSelections(false) }} className="bg-green-400 hover:bg-green-600 hover:text-white text-gray-900 font-bold py-3 px-6 rounded transition-all duration-200 mt-10" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>Login With TippinCrypto</button><br />
-                <button onClick={() => { loginWithMetamask(); setShowLoginSelections(false) }} className="bg-green-400 hover:bg-green-600 hover:text-white text-gray-900 font-bold py-3 px-6 rounded transition-all duration-200 mt-10" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>Login With MetaMask</button><br />
+                {/* <button onClick={() => { setShowForm(true); setShowLoginSelections(false) }} className="bg-green-400 hover:bg-green-600 hover:text-white text-gray-900 font-bold py-3 px-6 rounded transition-all duration-200 mt-10" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>Login With TippinCrypto</button><br /> */}
+                <button onClick={() => { loginWithMetamask(); setShowLoginSelections(false) }} className="bg-yellow-500 hover:bg-white hover:text-yellow-500 text-white font-bold py-3 px-6 rounded transition-all duration-200 mt-10" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>Login With MetaMask</button><br />
             </div> : null }
             { showForm ? <TippinCryptoLoginForm /> : null }
         </center>

@@ -1,0 +1,100 @@
+.tippingParameters {
+    display: inline-block;
+    width: 40%;
+    border-radius: 0.5rem;
+    background-color: #515361;
+}
+
+.nameText {
+    padding-top: 8%;
+    margin-left: 8%;
+}
+
+.name {
+    margin-left: 8%;
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    width: 40%;
+    height: 3rem;
+    background: #171821;
+    color: white;
+    border-radius: 7.5px;
+}
+
+
+.amountText {
+    margin-left: 80%;
+    margin-top: -48%;
+}
+
+.amount {
+    margin-left: 80%;
+    margin-top: 0.5rem;
+    margin-bottom: 25%;
+    padding-left: 1rem;
+    width: 40%;
+    height: 3rem;
+    background: #171821;
+    color: white;
+    border-radius: 7.5px;
+}
+
+
+
+.descriptionText {
+    margin-left: 8%;
+}
+
+.description {
+    margin-left: 8%;
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    width: 50%;
+    height: 5rem;
+    background: #171821;
+    color: white;
+    border-radius: 7.5px;
+    margin-bottom: 2rem;
+}
+
+.currencies {
+    margin-left: 8%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.btc {
+    background-color: #F2A900;
+}
+
+.eth {
+    background-color: #6A80CD;
+}
+
+.bnb {
+    background-color: #EDB630;
+}
+
+.shib {
+    background-color: #FED46F;
+}
+
+
+/* Currencies Hover */
+
+
+.btc:hover {
+    background-color: #f7bf3c;
+}
+
+.eth:hover {
+    background-color: #869ae2;
+}
+
+.bnb:hover {
+    background-color: #facd5a;
+}
+
+.shib:hover {
+    background-color: #ffe19b;
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from "react-router-dom";
 import { ethers } from 'ethers';
 import Gradient from 'rgt';
+import { apiConfig } from '../../config/api.config';
 import Cookies from 'universal-cookie';
 import Web3 from 'web3';
 
@@ -104,7 +105,7 @@ const MainSignUpPage = () => {
     if(cookies.get('prvt_add') != undefined) {
         window.location.href = "/";
     }
-    const currentHostName = "http://tippincrypto.com"
+    const currentHostName = apiConfig.urls.domain;
     return (
         <center>
             { showLoginSelections ? <div id="loginSelection">

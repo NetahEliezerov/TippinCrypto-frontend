@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { apiConfig } from '../../config/api.config';
 import { useParams } from 'react-router';
 import Gradient from 'rgt';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 
-const socket = io("https://153.92.222.12:443");
+const socket = io(apiConfig.urls.backendService);
 
 const MainAlertWidget = () => {
     const [ethPrice, setEthPrice] = useState(0);

@@ -1,0 +1,41 @@
+.alertSettings {
+    margin-left: 17.5%;
+    margin-top: 5%;
+    font-family: 'Poppins';
+}
+
+.alertWidgetTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-left: 5%;
+}
+
+/* .homeButtonGradient {
+    background: rgb(236,125,94);
+    background: linear-gradient(90deg, rgba(236,125,94,1) 0%, rgba(232,159,113,1) 50%, rgba(223,92,213,1) 100%);
+    font-size: 20px;
+    color: white;
+    font-weight: 600;
+    transition-duration: 300ms;
+    font-family: 'Poppins';
+    font-weight: '400';
+    float: left;
+    margin-top: 4%;
+}
+
+.homeButtonGradient:hover {
+transform: scale(1.025);
+/* background: linear-gradient(90deg, rgba(223,92,213,1) 0%, rgba(232,159,113,1) 50%, rgba(236,125,94,1) 100%); */
+
+*/
+
+.alertParameterSettings {
+    display: inline-block;
+    width: 55%;
+    border-radius: 16px;
+    margin-left: 5%;
+    margin-top: 2%;
+    height: 30rem;
+    background: linear-gradient(90deg, #665F9B 0%, #4988CE 100%);;
+}

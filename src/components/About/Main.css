@@ -1,0 +1,16 @@
+.animationAbout {
+    width: 64%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.aboutUsImg {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 8rem;
+    width: 50rem;
+    transition-duration: 400ms;
+}
+/* .aboutUsImg:hover {
+    width: 51rem;
+} */

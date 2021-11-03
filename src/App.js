@@ -14,12 +14,15 @@ import MainAlertWidget from './components/AlertWidget/main';
 import MainHIWPage from './components/HowItsWork/main';
 import Main404Page from './components/404/main';
 import MainDashboardPage from './components/Dashboard/main';
+import MainAlertBoxPage from './components/Dashboard/AlertBox/main';
+import SideBar from './components/Dashboard/SideBar';
 
+const needToShowNav = window.location.pathname !== '/dashboard' && window.location.pathname !== '/dashboard/alertbox';
 function App() {
   return (
     <Router>
 
-      <Navbar />
+      { needToShowNav ? ( <Navbar /> ) : null }
 
       <Switch>
         <Route exact path="/howitswork">
@@ -44,7 +47,12 @@ function App() {
           <MainSignUpPage />
         </Route>
         <Route exact path="/dashboard">
+          <SideBar />
           <MainDashboardPage />
+        </Route>
+        <Route exact path="/dashboard/alertbox">
+          <SideBar />
+          <MainAlertBoxPage />
         </Route>
         <Route exact path="/">
           <MainHomePage />

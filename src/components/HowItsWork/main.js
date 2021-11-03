@@ -3,6 +3,9 @@ import React from 'react'
 const MainHIWPage = () => {
     return (
         <div>
+            <center>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/0tmoAiV3KKc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </center>
             {/* <h1 className="text-center text-5xl pt-36 text-white" style={{fontFamily:'Poppins',fontWeight:'bold'}}>Sign Up</h1>
             <div className="bg-gray-800 rounded-lg" style={{width: '50%', marginLeft: 'auto', marginRight: 'auto', marginTop: '1%'}}>
                 <p className="text-center text-1xl text-white pt-5"  style={{fontFamily:'Poppins',fontWeight:'400'}}>

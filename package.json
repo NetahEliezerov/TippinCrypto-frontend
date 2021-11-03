@@ -15,6 +15,7 @@
     "crypto-js": "^4.1.1",
     "ethers": "^5.5.1",
     "ipfs-api": "^26.1.2",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.2.0",
     "react-charts": "^2.0.0-beta.7",
@@ -34,7 +35,7 @@
     "web3": "^1.6.0"
   },
   "scripts": {
-    "start": "PORT=80 craco start",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

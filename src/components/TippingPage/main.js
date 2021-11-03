@@ -3,11 +3,14 @@ import { useParams } from 'react-router';
 import { FiCopy } from 'react-icons/fi';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import WalletService from '../../services/wallet.service';
 import Web3 from 'web3';
+import { apiConfig } from '../../config/api.config';
 import Gradient from 'rgt';
 import { ethers } from "ethers";
+// import
 
-const socket = io("https://153.92.222.12:443");
+const socket = io(apiConfig.urls.backendService);
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -34,11 +37,13 @@ const verifyMessage = async ({ message, address, signature }) => {
 const MainTippingPage = () => {
     const streamer = useParams();
     const { ethereum } = window;
+    const [donateCurrency, setDonateCurrency] = useState('ETH');
     const [amountToTip, setAmountToTip] = useState('');
     const [tipperName, setTipperName] = useState('');
     const [description, setDescription] = useState('');
     const { streamerKey } = useParams();
     const web3 = new Web3(ethereum);
+    const walletService = new WalletService(ethereum);
     verifyMessage({message:streamer.streamerName,address:streamer.streamerKey,signature:streamer.streamerSig}).then((res) => {
         console.log(res)
         if(res == false) {
@@ -47,7 +52,7 @@ const MainTippingPage = () => {
     });
     // console.log(ethereum.networkVersion);
     if(typeof window.ethereum !== 'undefined') {
-        if(ethereum.networkVersion != '1') {
+        if(ethereum.networkVersion != '1' && !apiConfig.modes.testMode) {
             alert('Invalid Network.');
             window.open("about:blank", "_self");
             window.close();
@@ -59,56 +64,58 @@ const MainTippingPage = () => {
         if(amountToTip === '') {
             alert("You need to type amount of ethers to tip.");
         } else {
-            const ethereumPrice = (await axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,ILS')).data;
-            console.log(ethereumPrice.USD, parseFloat(amountToTip))
-            console.log(ethereumPrice.USD * parseFloat(amountToTip));
-            const amountthathewantstotip = ethereumPrice.USD * parseFloat(amountToTip);
-            console.log(parseFloat(amountToTip) < amountthathewantstotip);
-            if(3 > amountthathewantstotip) {
-                alert("You can't tip an amount that below 3 dollars.")
-            } else {
-                const transactionParameters = {
-                    nonce: '0x00', // ignored by MetaMask
-                    gasPrice: ethers.utils.parseUnits('0.001', 'ether').toHexString(), // customizable by user during MetaMask confirmation.
-                    gas: '0x2710', // customizable by user during MetaMask confirmation.
-                    to: streamerKey, // Required except during contract publications.
-                    from: ethereum.selectedAddress, // must match user's active address.
-                    value: ethers.utils.parseUnits(amountToTip, 'ether').toHexString(), // Only required to send ether to the recipient from the initiating external account.
-                    chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-                };
-                // txHash is a hex string
-                // As with any RPC call, it may throw an error
-                const txHash = await ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [transactionParameters],
-                });
-                if(tipperName === '') {
-                    socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: null, address: tipperAddress, description });
-                } else {
-                    socket.emit('newClientTip', { streamerKey, amount: amountToTip, name: tipperName, address: tipperAddress, description, date: new Date() });
-                }
-                alert("Donation Accepted! Thanks for supporting", streamer.streamerName);
-            }
+            walletService.makeTransaction(amountToTip, streamerKey, donateCurrency, tipperName, description, streamer, tipperAddress);
         }
     }
+    function setToETH() {
+        setDonateCurrency('ETH');
+    }
 
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-    
+    function setToSHIB() {
+        setDonateCurrency('SHIB');
+    }
 
-    // console.log(streamer.streamerKey);
+    function setToBAT() {
+        setDonateCurrency('BAT');
+    }
+
+    function setToBNB() {
+        setDonateCurrency('BNB');
+    }
+
+    function setToWBTC() {
+        setDonateCurrency('wBTC');
+    }
+
     return (
         <div>
             <div className="p-60">
                 {/* <img src={`https://avatars.dicebear.com/api/initials/${useParams().streamerName}.svg`} className="w-20 rounded-full" /> */}
                 <h1 className="text-6xl pt-3" style={{fontFamily: 'Poppins', fontWeight: '600'}}><Gradient dir="left-to-right" from="#9C4EFF" to="#FF006B">{capitalizeFirstLetter(useParams().streamerName)}</Gradient></h1>
-                <button onClick={() => {navigator.clipboard.writeText(streamerKey)}} className="bg-white hover:bg-green-400 hover:text-white text-green-600 font-bold py-3 px-6 rounded transition-all duration-200 mt-5 w-44" style={{fontFamily:'Poppins',fontWeight:'400',fontSize:'16px'}}>{ putDotsAfterLongString(useParams().streamerKey) } <FiCopy className="ml-32" style={{marginTop:'-20px'}} /></button>
                 <br />
                 <br />
                 <div class="mb-4">
                     <input class="mt-5 rounded w-72 py-2 px-3 text-white bg-gray-800" id="signature" required onChange={(event) => setTipperName(event.target.value)} placeholder="Name" />
                     <br />
-                    <input class="mt-5 rounded w-72 py-2 px-3 text-white bg-gray-700" id="public_key" required onChange={(event) => setAmountToTip(event.target.value)} placeholder="Amount To Tip (In ETH)*" />
+                    <br />
+                    <div class="inline-flex">
+                        <button onClick={setToWBTC} class="bg-yellow-400 hover:bg-yellow-300 text-gray-800 font-bold py-2 px-4 rounded-l duration-200">
+                            wBTC
+                        </button>
+                        <button onClick={setToETH} class="bg-blue-500 hover:bg-blue-400 text-gray-800 font-bold py-2 px-4 duration-200">
+                            ETH
+                        </button>
+                        <button onClick={setToSHIB} class="bg-yellow-500 hover:bg-yellow-400 text-gray-800 font-bold py-2 px-4 duration-200">
+                            SHIB
+                        </button>
+                        <button onClick={setToBNB} class="bg-yellow-400 hover:bg-yellow-300 text-gray-800 font-bold py-2 px-4 duration-200">
+                            BNB
+                        </button>
+                        <button onClick={setToBAT} class="bg-pink-600 hover:bg-pink-400 text-gray-800 font-bold py-2 px-4 rounded-r duration-200">
+                            BAT
+                        </button>
+                    </div><br />
+                    <input class="mt-5 rounded w-72 py-2 px-3 text-white bg-gray-700" id="public_key" required onChange={(event) => setAmountToTip(event.target.value)} placeholder={`Amount To Tip (In ${donateCurrency})*`} />
                     <br />
                     <input class="mt-5 rounded w-72 h-20 py-2 px-3 text-white bg-gray-600" id="public_key" required onChange={(event) => setDescription(event.target.value)} placeholder="Description" />
                 </div>
