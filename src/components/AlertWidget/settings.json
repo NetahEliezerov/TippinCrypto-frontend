@@ -1,3 +1,42 @@
-[{
-    "default": ""
-}]
+{
+    "default": {
+        "amountTextColor": "text-blue-400",
+        "nameTextGradient": [
+            "#9C4EFF",
+            "#FF006B"
+        ],
+        "descriptionTextColor": "text-green-400"
+    },
+    "blackwhite": {
+        "amountTextColor": "text-white",
+        "nameTextGradient": [
+            "white",
+            "grey"
+        ],
+        "descriptionTextColor": "text-white"
+    },
+    "greenstyle": {
+        "amountTextColor": "text-green-400",
+        "nameTextGradient": [
+            "#aaee00",
+            "#11cc33"
+        ],
+        "descriptionTextColor": "text-green-200"
+    },
+    "redstyle": {
+        "amountTextColor": "text-red-400",
+        "nameTextGradient": [
+            "#ff4466",
+            "red"
+        ],
+        "descriptionTextColor": "text-red-200"
+    },
+    "bluestyle": {
+        "amountTextColor": "text-blue-400",
+        "nameTextGradient": [
+            "#4ca3dd",
+            "blue"
+        ],
+        "descriptionTextColor": "text-blue-200"
+    }
+}

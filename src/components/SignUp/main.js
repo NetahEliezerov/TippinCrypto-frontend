@@ -74,10 +74,12 @@ const MainSignUpPage = () => {
     const signUpWithMetamaskBtn = async () => {
         setShowLoginSelections(false);
         let metamaskInstalled;
-        if(typeof ethereum !== undefined) {
+        if(typeof ethereum !== 'undefined') {
             metamaskInstalled = true;
         } else {
+            alert("Metamask not installed!");
             metamaskInstalled = false;
+            window.location.href = "/";
         }
 
         if(metamaskInstalled) {

@@ -31,7 +31,7 @@ function App() {
         <Route exact path="/about">
           <MainAboutPage />
         </Route>
-        <Route exact path="/:streamerKey/alert">
+        <Route exact path="/:streamerKey/alert/:style">
           <MainAlertWidget />
         </Route>
         <Route exact path="/404">

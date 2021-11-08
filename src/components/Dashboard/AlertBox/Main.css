@@ -38,4 +38,15 @@ transform: scale(1.025);
     margin-top: 2%;
     height: 30rem;
     background: linear-gradient(90deg, #665F9B 0%, #4988CE 100%);;
+    background-color: black;
+}
+
+.alertStyles {
+    width: 20%;
+    margin-left: 2%;
+    display: inline;
+}
+
+.blackwhite {
+    
 }
